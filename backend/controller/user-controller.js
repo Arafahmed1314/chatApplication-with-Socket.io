@@ -2,23 +2,36 @@ import createTokenAndSaveCookie from "../jwt/generate-token.js";
 import User from "../models/user-model.js";
 import bcrypt from "bcryptjs";
 export const signup = async (req, res) => {
-    const { fullname, email, password, confirmPassword } = req.body || {};
+    const { fullname, fullName, email, password, confirmPassword } = req.body || {};
+
+    // Handle both camelCase and lowercase
+    const name = fullname || fullName;
+
     try {
+        if (!name || !email || !password || !confirmPassword) {
+            return res.status(400).json({ error: "All fields are required" });
+        }
+
         if (password !== confirmPassword) {
             return res.status(400).json({ error: "Passwords do not match" });
         }
+
         const user = await User.findOne({ email });
         if (user) {
             return res.status(400).json({ error: "User already registered" });
         }
+
         // Hashing the password
         const hashPassword = await bcrypt.hash(password, 10);
+
         const newUser = await new User({
-            fullname,
+            fullname: name,
             email,
             password: hashPassword,
         });
+
         await newUser.save();
+
         if (newUser) {
             createTokenAndSaveCookie(newUser._id, res);
             res.status(201).json({
@@ -58,12 +71,21 @@ export const login = async (req, res) => {
         res.status(500).json({ error: "Internal server error" });
     }
 };
-
 export const logout = (req, res) => {
     res.clearCookie("token", {
         httpOnly: true,
-        secure: true,
-        sameSite: 'Strict',
+        secure: process.env.NODE_ENV === 'production', // Match the cookie setting
+        sameSite: 'lax',
     });
     res.status(200).json({ message: "Logout successful" });
 };
+export const getUserProfile = async (req, res) => {
+    try {
+        const loggedUser = req.user._id;
+        const allUsers = await User.find({ _id: { $ne: loggedUser } }).select("-password");
+        res.status(200).json(allUsers);
+    } catch (error) {
+        res.status(500).json({ error: "Internal server error" });
+    }
+
+}
