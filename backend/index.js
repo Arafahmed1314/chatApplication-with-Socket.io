@@ -1,6 +1,5 @@
 
 import express from 'express';
-const app = express();
 import bodyParser from 'body-parser';
 import cors from 'cors';
 import mongoose from 'mongoose';
@@ -8,9 +7,9 @@ import dotenv from 'dotenv';
 import userRoutes from './route/user-route.js';
 import messageRoutes from './route/message-route.js';
 import cookieParser from 'cookie-parser';
+import { app, server } from './socketIO/server.js';
 
 dotenv.config();
-
 const PORT = process.env.PORT || 5000;
 
 app.use(cors({
@@ -37,6 +36,6 @@ app.get('/', (req, res) => {
 app.use('/users', userRoutes);
 app.use('/messages', messageRoutes);
 
-app.listen(PORT, () => {
+server.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
 });

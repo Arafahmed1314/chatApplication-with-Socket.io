@@ -1,0 +1,31 @@
+import { getReceiverSocketId, io } from "../socketIO/server.js";--controllermessage
+
+
+usegetsocketmessage
+
+import { useSocket } from './SocketContext'
+import useConversation from '../stateManage/useConversation';
+import { useEffect } from 'react';
+import sound from './noti.mp3'
+export default function useGetSocketMessage() {
+    const { socket } = useSocket();
+    const { messages, setMessages } = useConversation();
+
+    useEffect(() => {
+        if (!socket) return;
+
+        const handleNewMessage = (newMessage) => {
+            const notificationSound = new Audio(sound);
+            notificationSound.play();
+            console.log("Received new message via socket:", newMessage);
+            // Append the new message to the existing messages
+            setMessages((prevMessages) => [...prevMessages, newMessage]);
+        };
+
+        socket.on("newMessage", handleNewMessage);
+
+        return () => {
+            socket.off("newMessage", handleNewMessage);
+        };
+    }, [socket, setMessages]); // Removed 'messages' from dependency array
+}
