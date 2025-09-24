@@ -8,14 +8,10 @@ function GetAllUsers() {
     const getUsers = async () => {
       setLoading(true);
       try {
-        const token = Cookies.get("token");
         const response = await axios.get(
           "http://localhost:5000/users/getuserprofile",
           {
             withCredentials: true,
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
           }
         );
         setAllUser(response.data);

@@ -1,7 +1,7 @@
 import React from "react";
 import { HiStatusOnline } from "react-icons/hi";
 
-export default function Chatuser() {
+export default function Chatuser({ selectedConversation }) {
   return (
     <div className="flex items-center space-x-4 p-6">
       <div className="relative">
@@ -15,7 +15,9 @@ export default function Chatuser() {
         <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-green-500 rounded-full border-2 border-slate-800"></div>
       </div>
       <div>
-        <h3 className="font-medium text-white">Araf Ahmed</h3>
+        <h3 className="font-medium text-white">
+          {selectedConversation?.fullname}
+        </h3>
         <div className="flex items-center text-sm text-green-400">
           <HiStatusOnline className="w-3 h-3 mr-1" />
           <span>Online</span>

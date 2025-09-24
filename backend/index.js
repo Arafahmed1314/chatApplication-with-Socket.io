@@ -6,6 +6,7 @@ import cors from 'cors';
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 import userRoutes from './route/user-route.js';
+import messageRoutes from './route/message-route.js';
 import cookieParser from 'cookie-parser';
 
 dotenv.config();
@@ -34,6 +35,7 @@ app.get('/', (req, res) => {
     res.send('Welcome to the User Management API');
 });
 app.use('/users', userRoutes);
+app.use('/messages', messageRoutes);
 
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);

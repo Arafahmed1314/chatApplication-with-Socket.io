@@ -1,6 +1,7 @@
 import React from "react";
 import User from "./User";
 import GetAllUsers from "../../context/GetAllUsers";
+import Loading from "../../components/Loading";
 
 export default function Users() {
   const { allUser, loading } = GetAllUsers();
@@ -9,9 +10,9 @@ export default function Users() {
   return (
     <div className="h-full overflow-y-auto hide-scrollbar">
       {loading ? (
-        <p>Loading...</p>
+        <Loading />
       ) : (
-        allUser.map((user) => <User key={user.id} user={user} />)
+        allUser.map((user) => <User key={user._id} user={user} />)
       )}
     </div>
   );

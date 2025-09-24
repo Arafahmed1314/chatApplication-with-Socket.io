@@ -1,13 +1,15 @@
 import React, { useState } from "react";
 import { IoSend } from "react-icons/io5";
+import useSendMessage from "../../context/useSendMessage";
 
 export default function MessageInput() {
+  const { loading, sendMessage } = useSendMessage();
   const [message, setMessage] = useState("");
 
-  const handleSend = (e) => {
+  const handleSend = async (e) => {
     e.preventDefault();
-    if (message.trim()) {
-      console.log("Sending message:", message);
+    if (message.trim() && !loading) {
+      await sendMessage(message);
       setMessage("");
     }
   };
@@ -25,9 +27,13 @@ export default function MessageInput() {
         <button
           type="submit"
           className="p-3 bg-blue-600 hover:bg-blue-700 rounded-xl text-white transition-all duration-200 disabled:opacity-50"
-          disabled={!message.trim()}
+          disabled={!message.trim() || loading}
         >
-          <IoSend className="w-5 h-5" />
+          {loading ? (
+            <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+          ) : (
+            <IoSend className="w-5 h-5" />
+          )}
         </button>
       </form>
     </div>
