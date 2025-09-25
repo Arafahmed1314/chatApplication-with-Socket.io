@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { useAuth } from "../context/AuthProvider";
+import API_BASE_URL from "../config/api.js";
 
 export default function LoginModal({ isOpen, onClose, onSwitchToSignup }) {
   const { setAuthUser } = useAuth();
@@ -25,7 +26,7 @@ export default function LoginModal({ isOpen, onClose, onSwitchToSignup }) {
 
     try {
       const response = await axios.post(
-        "http://localhost:5000/users/login",
+        `${API_BASE_URL}/users/login`,
         data,
         {
           withCredentials: true,

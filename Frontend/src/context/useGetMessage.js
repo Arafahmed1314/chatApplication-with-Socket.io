@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import useConversation from '../stateManage/useConversation';
 import axios from 'axios';
+import API_BASE_URL from '../config/api.js';
 
 export default function useGetMessage() {
     const [loading, setLoading] = useState(false);
@@ -13,7 +14,7 @@ export default function useGetMessage() {
             if (!selectedConversation) return;
             setLoading(true);
             try {
-                const response = await axios.get(`http://localhost:5000/messages/get/${selectedConversation._id}`, {
+                const response = await axios.get(`${API_BASE_URL}/messages/get/${selectedConversation._id}`, {
                     withCredentials: true
                 });
                 console.log("API response:", response.data);

@@ -1,6 +1,7 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { useAuth } from "./AuthProvider";
 import io from "socket.io-client";
+import API_BASE_URL from "../config/api.js";
 const SocketContext = createContext();
 
 function SocketProvider({ children }) {
@@ -10,7 +11,7 @@ function SocketProvider({ children }) {
 
   useEffect(() => {
     if (authUser) {
-      const newSocket = io("http://localhost:5000", {
+      const newSocket = io(API_BASE_URL, {
         query: { userId: authUser.user._id },
       });
       setSocket(newSocket);

@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { useAuth } from "../../context/AuthProvider";
 import Cookies from "js-cookie";
+import API_BASE_URL from "../../config/api.js";
 
 export default function Logout() {
   const navigate = useNavigate();
@@ -13,7 +14,7 @@ export default function Logout() {
   const handleLogout = async () => {
     try {
       await axios.post(
-        "http://localhost:5000/users/logout",
+        `${API_BASE_URL}/users/logout`,
         {},
         {
           withCredentials: true,

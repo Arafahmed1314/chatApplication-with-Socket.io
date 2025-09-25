@@ -3,6 +3,7 @@ import { toast } from 'react-toastify';
 import useConversation from '../stateManage/useConversation.js';
 import { useAuth } from './AuthProvider.jsx';
 import axios from 'axios';
+import API_BASE_URL from '../config/api.js';
 
 export default function useSendMessage() {
     const [loading, setLoading] = useState(false);
@@ -27,7 +28,7 @@ export default function useSendMessage() {
         setLoading(true);
 
         try {
-            const response = await axios.post(`http://localhost:5000/messages/send/${selectedConversation._id}`, {
+            const response = await axios.post(`${API_BASE_URL}/messages/send/${selectedConversation._id}`, {
                 message: messageText,
             }, {
                 withCredentials: true

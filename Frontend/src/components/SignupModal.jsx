@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { useAuth } from "../context/AuthProvider";
+import API_BASE_URL from "../config/api.js";
 
 export default function SignupModal({ isOpen, onClose, onSwitchToLogin }) {
   const { setAuthUser } = useAuth();
@@ -35,7 +36,7 @@ export default function SignupModal({ isOpen, onClose, onSwitchToLogin }) {
 
     try {
       const response = await axios.post(
-        "http://localhost:5000/users/signup",
+        `${API_BASE_URL}/users/signup`,
         userInfo
       );
       console.log(response.data);
