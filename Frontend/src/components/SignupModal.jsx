@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { toast } from "react-toastify";
 import { useAuth } from "../context/AuthProvider";
 
 export default function SignupModal({ isOpen, onClose, onSwitchToLogin }) {
@@ -33,22 +34,30 @@ export default function SignupModal({ isOpen, onClose, onSwitchToLogin }) {
     setSuccessMessage("");
 
     try {
-      await axios
-        .post("http://localhost:5000/users/signup", userInfo)
-        .then((response) => {
-          console.log(response.data);
-          localStorage.setItem("user", JSON.stringify(response.data));
-          setAuthUser(response.data);
-        });
+      const response = await axios.post(
+        "http://localhost:5000/users/signup",
+        userInfo
+      );
+      console.log(response.data);
+      localStorage.setItem("user", JSON.stringify(response.data));
+      setAuthUser(response.data);
+
+      toast.success("Account created successfully! Welcome to the chat!", {
+        icon: "🎉",
+      });
+
       setTimeout(() => {
-        onSwitchToLogin();
-      }, 2000);
+        navigate("/chat");
+        onClose();
+      }, 1500);
     } catch (error) {
-      if (error.response && error.response.data && error.response.data.error) {
-        setApiError(error.response.data.error);
-      } else {
-        setApiError("An unexpected error occurred. Please try again.");
-      }
+      const errorMessage =
+        error.response?.data?.error ||
+        "An unexpected error occurred. Please try again.";
+      setApiError(errorMessage);
+      toast.error(errorMessage, {
+        icon: "❌",
+      });
     }
   };
 

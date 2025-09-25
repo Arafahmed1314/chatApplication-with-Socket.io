@@ -4,7 +4,9 @@ const useConversation = create((set) => ({
     selectedConversation: null,
     setSelectedConversation: (conversation) => set({ selectedConversation: conversation }),
     messages: [],
-    setMessages: (messages) => set({ messages }),
+    setMessages: (messages) => set((state) => ({
+        messages: typeof messages === 'function' ? messages(state.messages) : messages
+    })),
     searchTerm: "",
     setSearchTerm: (searchTerm) => set({ searchTerm }),
 }))

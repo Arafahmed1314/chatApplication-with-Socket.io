@@ -5,7 +5,10 @@ import {
   Navigate,
   useNavigate,
 } from "react-router-dom";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import { useAuth } from "./context/AuthProvider";
+import useConversation from "./stateManage/useConversation";
 import AuthModal from "./components/AuthModal";
 import LoginModal from "./components/LoginModal";
 import SignupModal from "./components/SignupModal";
@@ -45,10 +48,30 @@ export default function App() {
 
   // Chat page component with auth modal
   const ChatPage = () => {
+    const { selectedConversation } = useConversation();
+
     return (
-      <div className="flex h-screen w-full relative">
-        <Left />
-        <Right />
+      <div className="flex h-screen w-full relative bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 overflow-hidden">
+        {/* Mobile and Desktop Layout */}
+        <div className="flex w-full h-full relative">
+          {/* Left sidebar - Hidden on mobile when conversation is selected */}
+          <div
+            className={`w-full md:w-1/3 lg:w-1/4 md:flex-shrink-0 relative z-10 transition-transform duration-300 ${
+              selectedConversation ? "hidden md:flex" : "flex"
+            }`}
+          >
+            <Left />
+          </div>
+
+          {/* Right chat area - Show on mobile when conversation is selected */}
+          <div
+            className={`w-full md:w-2/3 lg:w-3/4 relative z-10 transition-transform duration-300 ${
+              selectedConversation ? "flex" : "hidden md:flex"
+            }`}
+          >
+            <Right />
+          </div>
+        </div>
 
         {/* Show auth modal if user is not authenticated */}
         {!authUser && (
@@ -86,6 +109,26 @@ export default function App() {
           <Route path="/" element={<Navigate to="/chat" replace />} />
         </Routes>
       </div>
+
+      {/* Toast Container for notifications */}
+      <ToastContainer
+        position="top-right"
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop={true}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="dark"
+        toastClassName="custom-toast"
+        bodyClassName="custom-toast-body"
+        closeButton={false}
+        style={{
+          borderRadius: "12px",
+        }}
+      />
     </Router>
   );
 }

@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { toast } from "react-toastify";
 import { useAuth } from "../context/AuthProvider";
 
 export default function LoginModal({ isOpen, onClose, onSwitchToSignup }) {
@@ -32,17 +33,19 @@ export default function LoginModal({ isOpen, onClose, onSwitchToSignup }) {
       );
       localStorage.setItem("user", JSON.stringify(response.data));
       setAuthUser(response.data);
-      setSuccessMessage("Login successful! Welcome back.");
-      setTimeout(() => {
-        onClose();
-        navigate("/chat");
-      }, 1000);
+      toast.success("Login successful! Welcome back.", {
+        icon: "👋",
+      });
+      onClose();
+      navigate("/chat");
     } catch (error) {
-      if (error.response && error.response.data && error.response.data.error) {
-        setApiError(error.response.data.error);
-      } else {
-        setApiError("An unexpected error occurred. Please try again.");
-      }
+      const errorMessage =
+        error.response?.data?.error ||
+        "An unexpected error occurred. Please try again.";
+      setApiError(errorMessage);
+      toast.error(errorMessage, {
+        icon: "❌",
+      });
     }
   };
 
