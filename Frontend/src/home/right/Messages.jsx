@@ -17,7 +17,7 @@ export default function Messages() {
   }
 
   return (
-    <div className="h-full overflow-y-auto hide-scrollbar pb-4">
+    <div className="h-full pb-4 px-4">
       {Array.isArray(messages) && messages.length > 0 ? (
         messages.map((message) => (
           <div key={message._id} ref={lastMessageRef}>
