@@ -6,8 +6,8 @@ const createTokenAndSaveCookie = (userId, res) => {
 
     res.cookie('token', token, {
         httpOnly: true,
-        secure: process.env.NODE_ENV === 'production', // Only secure in production
-        sameSite: 'lax', // More permissive for development
+        secure: true, // Always secure for production
+        sameSite: 'none', // Required for cross-domain cookies
         maxAge: 86400000, // 24 hours
     });
 
